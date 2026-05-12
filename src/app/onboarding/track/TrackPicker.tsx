@@ -68,7 +68,7 @@ export function TrackPicker({ tracks }: { tracks: Track[] }) {
       </div>
 
       <Section title="Foundation tracks">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {foundation.map((t) => (
             <TrackCard
               key={t.id}
@@ -81,7 +81,8 @@ export function TrackPicker({ tracks }: { tracks: Track[] }) {
       </Section>
 
       <Section title="The five-fold tracks" caption="Ephesians 4:11 · in order">
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+        {/* Single column on mobile/tablet — five-across is cramped under ~1280px. */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
           {fivefold.map((t) => (
             <TrackCard
               key={t.id}

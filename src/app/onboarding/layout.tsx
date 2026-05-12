@@ -30,7 +30,7 @@ export default async function OnboardingLayout({
         </form>
       </header>
       <main className="flex-1 px-6 pb-16 md:px-12 flex justify-center">
-        <div className="w-full max-w-2xl">{children}</div>
+        <div className="w-full max-w-3xl xl:max-w-6xl">{children}</div>
       </main>
     </div>
   );

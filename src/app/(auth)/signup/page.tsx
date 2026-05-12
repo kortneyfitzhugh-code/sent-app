@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { createSupabaseBrowserClient } from "@/lib/supabase/browser";
 import { StepHeader } from "@/components/onboarding/StepHeader";
+import { PasswordField } from "@/components/PasswordField";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -31,7 +32,11 @@ export default function SignupPage() {
     const { error: signupError } = await supabase.auth.signUp({
       email,
       password,
-      options: { data: { full_name: fullName } },
+      options: {
+        data: { full_name: fullName },
+        emailRedirectTo:
+          typeof window !== "undefined" ? `${window.location.origin}/auth/callback` : undefined,
+      },
     });
     setBusy(false);
     if (signupError) {
@@ -76,29 +81,23 @@ export default function SignupPage() {
             autoComplete="email"
           />
         </Field>
-        <Field label="Password">
-          <input
-            className="input-shell"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="At least 12 characters"
-            required
-            minLength={12}
-            autoComplete="new-password"
-          />
-        </Field>
-        <Field label="Confirm password">
-          <input
-            className="input-shell"
-            type="password"
-            value={confirm}
-            onChange={(e) => setConfirm(e.target.value)}
-            placeholder="Re-enter"
-            required
-            autoComplete="new-password"
-          />
-        </Field>
+        <PasswordField
+          label="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder="At least 12 characters"
+          required
+          minLength={12}
+          autoComplete="new-password"
+        />
+        <PasswordField
+          label="Confirm password"
+          value={confirm}
+          onChange={(e) => setConfirm(e.target.value)}
+          placeholder="Re-enter"
+          required
+          autoComplete="new-password"
+        />
 
         {error && (
           <p className="text-sm font-body text-fire" role="alert">

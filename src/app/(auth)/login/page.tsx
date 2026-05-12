@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useState } from "react";
 import { createSupabaseBrowserClient } from "@/lib/supabase/browser";
+import { PasswordField } from "@/components/PasswordField";
 
 export default function LoginPage() {
   return (
@@ -40,7 +41,7 @@ function LoginForm() {
     <div className="flex flex-col gap-10">
       <div className="flex flex-col gap-3">
         <p className="label">Sign in</p>
-        <h1 className="display text-4xl md:text-5xl leading-tight">Return to your post.</h1>
+        <h1 className="display text-4xl md:text-5xl leading-tight">Welcome back.</h1>
       </div>
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-5">
@@ -56,17 +57,13 @@ function LoginForm() {
             autoComplete="email"
           />
         </label>
-        <label className="flex flex-col gap-2">
-          <span className="label">Password</span>
-          <input
-            className="input-shell"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            autoComplete="current-password"
-          />
-        </label>
+        <PasswordField
+          label="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+          autoComplete="current-password"
+        />
 
         {error && <p className="text-sm font-body text-fire">{error}</p>}
 
