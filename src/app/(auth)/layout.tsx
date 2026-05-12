@@ -1,5 +1,10 @@
 import { SentMark } from "@/components/SentMark";
 
+// Auth pages read Supabase env at render time. Force dynamic so we never
+// statically prerender them — that would crash the build when env vars
+// aren't present (Vercel sees no .env.local).
+export const dynamic = "force-dynamic";
+
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen flex flex-col">
