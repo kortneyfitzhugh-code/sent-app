@@ -1,0 +1,52 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-void:   #0D0D0D;
+  --color-carbon: #141414;
+  --color-cinder: #1E1E1E;
+  --color-ash:    #3A3A3A;
+  --color-smoke:  #6A6A6A;
+  --color-bone:   #F0ECE4;
+  --color-fire:   #E85A1E;
+  --color-ember:  #C04010;
+  --color-gold:   #D4A847;
+  --color-alive:  #3AB060;
+}
+
+html, body {
+  background: var(--color-void);
+  color: var(--color-bone);
+  -webkit-font-smoothing: antialiased;
+}
+
+@layer components {
+  .wordmark {
+    @apply font-display tracking-wider4 text-bone uppercase;
+  }
+  .label {
+    @apply font-nav uppercase tracking-wider3 text-smoke text-xs;
+  }
+  .display {
+    @apply font-display uppercase tracking-wider2 text-bone;
+  }
+  .input-shell {
+    @apply w-full bg-carbon border border-cinder rounded-md px-4 py-3 text-bone font-body
+           placeholder:text-smoke focus:outline-none focus:border-fire focus:ring-1 focus:ring-fire/40
+           transition-colors;
+  }
+  .btn-fire {
+    @apply inline-flex items-center justify-center gap-2 bg-fire hover:bg-ember
+           text-bone font-nav uppercase tracking-wider3 text-sm px-6 py-3 rounded-md
+           transition-colors disabled:bg-ash disabled:cursor-not-allowed;
+  }
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 border border-cinder hover:border-ash
+           text-bone font-nav uppercase tracking-wider3 text-sm px-6 py-3 rounded-md
+           transition-colors;
+  }
+  .card {
+    @apply bg-carbon border border-cinder rounded-xl;
+  }
+}

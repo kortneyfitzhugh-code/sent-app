@@ -1,0 +1,46 @@
+import { redirect } from "next/navigation";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
+
+export default async function SettingsPage() {
+  const supabase = createSupabaseServerClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) redirect("/login");
+
+  const { data: profile } = await supabase
+    .from("profile")
+    .select("full_name, email, role, city, state, country")
+    .eq("id", user.id)
+    .maybeSingle();
+
+  return (
+    <div className="p-6 md:p-10 flex flex-col gap-6 max-w-xl">
+      <p className="label">Settings</p>
+      <h1 className="display text-4xl md:text-5xl leading-tight">Your profile</h1>
+      {profile && (
+        <dl className="card p-5 grid grid-cols-2 gap-x-6 gap-y-4">
+          <Row label="Name" value={profile.full_name} />
+          <Row label="Email" value={profile.email} />
+          <Row label="Role" value={profile.role.replace("_", " ")} />
+          <Row
+            label="Location"
+            value={[profile.city, profile.state, profile.country].filter(Boolean).join(", ") || "—"}
+          />
+        </dl>
+      )}
+      <form action="/auth/sign-out" method="post">
+        <button className="btn-ghost">Sign out</button>
+      </form>
+    </div>
+  );
+}
+
+function Row({ label, value }: { label: string; value: string }) {
+  return (
+    <div>
+      <p className="label">{label}</p>
+      <p className="font-body text-bone mt-1">{value}</p>
+    </div>
+  );
+}
