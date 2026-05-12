@@ -13,7 +13,7 @@ export type FieldDef = {
   fieldKey: string;
   prompt: string;
   helper: string | null;
-  kind: "longtext" | "shorttext" | "radio" | "date" | "blocks" | "partners";
+  kind: "longtext" | "shorttext" | "radio" | "date" | "blocks" | "partners" | "boolean";
   options: FieldOption[] | null;
   maxChars: number | null;
   feedsAi: boolean;
@@ -223,6 +223,45 @@ function FieldControl({
                   selected
                     ? "bg-fire/15 border-fire text-bone"
                     : "border-cinder text-smoke hover:border-ash hover:text-bone"
+                } ${locked ? "opacity-50 cursor-not-allowed" : ""}`}
+              >
+                {opt.label}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+    );
+  }
+
+  if (field.kind === "boolean") {
+    const v = typeof value === "boolean" ? value : null;
+    return (
+      <div className="flex flex-col gap-2">
+        {labelRow}
+        <div role="radiogroup" className="inline-flex rounded-md border border-cinder p-1 self-start">
+          {[
+            { label: "Yes", value: true },
+            { label: "No", value: false },
+          ].map((opt) => {
+            const selected = v === opt.value;
+            return (
+              <button
+                key={opt.label}
+                type="button"
+                role="radio"
+                aria-checked={selected}
+                disabled={locked}
+                onClick={() => {
+                  onChange(opt.value);
+                  onCommit(opt.value);
+                }}
+                className={`min-w-[64px] px-4 py-1.5 rounded text-xs font-nav uppercase tracking-wider3 transition-colors ${
+                  selected
+                    ? opt.value
+                      ? "bg-fire text-bone"
+                      : "bg-ash text-bone"
+                    : "text-smoke hover:text-bone"
                 } ${locked ? "opacity-50 cursor-not-allowed" : ""}`}
               >
                 {opt.label}
