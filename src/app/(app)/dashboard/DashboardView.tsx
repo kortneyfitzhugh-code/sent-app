@@ -81,9 +81,9 @@ export function DashboardView({
               </div>
               <p className="label">{runwayPct}% of runway used</p>
             </div>
-            <div className="h-1 w-full bg-cinder rounded-full overflow-hidden">
+            <div className="h-2 w-full bg-ash/40 rounded-full overflow-hidden">
               <div
-                className="h-full bg-fire"
+                className="h-full bg-fire transition-[width] duration-300"
                 style={{ width: `${Math.min(runwayPct, 100)}%` }}
               />
             </div>
@@ -129,9 +129,9 @@ export function DashboardView({
               </div>
             )}
 
-            <div className="h-1 w-full bg-cinder rounded-full overflow-hidden">
+            <div className="h-2 w-full bg-ash/40 rounded-full overflow-hidden">
               <div
-                className="h-full bg-fire"
+                className="h-full bg-fire transition-[width] duration-300"
                 style={{ width: `${progressPct}%` }}
               />
             </div>

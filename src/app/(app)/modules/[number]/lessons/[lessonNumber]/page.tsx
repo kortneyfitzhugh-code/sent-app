@@ -3,6 +3,7 @@ import { notFound, redirect } from "next/navigation";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { LessonBody } from "./LessonBody";
 import { MarkReadButton } from "./MarkReadButton";
+import { SectionMarker } from "./SectionMarker";
 
 export default async function LessonReader({
   params,
@@ -104,12 +105,12 @@ export default async function LessonReader({
           <>
             {lesson.hook && (
               <section>
-                <p className="label mb-3">I · Opening</p>
+                <SectionMarker numeral="I" name="Opening" />
                 <p className="font-body text-bone text-lg leading-relaxed">{lesson.hook}</p>
               </section>
             )}
             <section>
-              <p className="label mb-3">II · The Lesson</p>
+              <SectionMarker numeral="II" name="The Lesson" />
               <LessonBody teaching={lesson.teaching} />
             </section>
             {linkedTask && (

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { LessonChip } from "./LessonChip";
 import { TaskRow } from "./TaskRow";
 
 export default async function ModuleView({
@@ -105,38 +106,26 @@ export default async function ModuleView({
           {mod.primary_objective && (
             <p className="font-body text-smoke text-sm">{mod.primary_objective}</p>
           )}
-          <div className="h-1 w-full bg-cinder rounded-full overflow-hidden">
-            <div className="h-full bg-fire" style={{ width: `${progressPct}%` }} />
+          <div className="h-2 w-full bg-ash/40 rounded-full overflow-hidden">
+            <div
+              className="h-full bg-fire transition-[width] duration-300"
+              style={{ width: `${progressPct}%` }}
+            />
           </div>
         </section>
 
-        {/* Lessons rail */}
+        {/* Lessons rail.
+            Each chip shows L# + lesson name. A chip is "active" (clickable)
+            when the lesson row has a teaching body. When Session 2.5 seeds
+            bodies for L2–L7, every chip flips to active automatically — no
+            code change needed here. */}
         <section className="flex flex-col gap-3">
           <p className="label">Lessons · {lessonList.length}</p>
-          <div className="flex flex-wrap gap-2">
-            {lessonList.map((l) => {
-              const hasContent = l.is_anchor; // V1: only L1 has full body
-              return (
-                <Link
-                  key={l.id}
-                  href={
-                    hasContent
-                      ? `/modules/${mod.number}/lessons/${l.number}`
-                      : `/modules/${mod.number}`
-                  }
-                  className={`px-3 py-2 rounded-md border text-xs font-nav uppercase tracking-wider3 transition-colors ${
-                    hasContent
-                      ? "border-cinder hover:border-fire text-bone"
-                      : "border-cinder text-smoke cursor-not-allowed pointer-events-none"
-                  }`}
-                  title={l.title}
-                >
-                  L{l.number}
-                  {!hasContent && " · Coming"}
-                </Link>
-              );
-            })}
-          </div>
+          <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+            {lessonList.map((l) => (
+              <LessonChip key={l.id} lesson={l} moduleNumber={mod.number} />
+            ))}
+          </ul>
         </section>
 
         {/* Task list */}
