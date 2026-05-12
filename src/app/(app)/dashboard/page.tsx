@@ -36,18 +36,23 @@ export default async function DashboardPage() {
   let taskCount = 0;
   let completedTasks = 0;
   if (firstModule) {
-    const { count: total } = await supabase
+    const { data: tasks } = await supabase
       .from("task")
-      .select("id", { count: "exact", head: true })
+      .select("id")
       .eq("module_id", firstModule.id);
-    taskCount = total ?? 0;
+    const taskIds = (tasks ?? []).map((t) => t.id);
+    taskCount = taskIds.length;
 
-    const { count: done } = await supabase
-      .from("task_assignment")
-      .select("id", { count: "exact", head: true })
-      .eq("planter_id", user.id)
-      .not("completed_at", "is", null);
-    completedTasks = done ?? 0;
+    if (taskIds.length > 0) {
+      // Only count completions for tasks belonging to this module.
+      const { count: done } = await supabase
+        .from("task_assignment")
+        .select("id", { count: "exact", head: true })
+        .eq("planter_id", user.id)
+        .in("task_id", taskIds)
+        .not("completed_at", "is", null);
+      completedTasks = done ?? 0;
+    }
   }
 
   return (

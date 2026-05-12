@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 type Profile = {
   full_name: string;
   role: "planter" | "team_member" | "network_admin";
@@ -101,7 +103,10 @@ export function DashboardView({
 
         {/* Active module */}
         {mod && (
-          <section className="card p-6 md:p-8 flex flex-col gap-5">
+          <Link
+            href={`/modules/${mod.number}`}
+            className="card p-6 md:p-8 flex flex-col gap-5 hover:border-ash transition-colors"
+          >
             <div className="flex items-center justify-between">
               <p className="label text-fire">
                 Module {String(mod.number).padStart(2, "0")} · Active
@@ -130,7 +135,9 @@ export function DashboardView({
                 style={{ width: `${progressPct}%` }}
               />
             </div>
-          </section>
+
+            <p className="label text-bone">Open module →</p>
+          </Link>
         )}
       </div>
 
@@ -149,11 +156,32 @@ export function DashboardView({
         <section className="card p-5">
           <div className="flex items-center justify-between mb-4">
             <p className="label">Active worksheets</p>
-            <span className="label">All →</span>
+            <Link href="/worksheets" className="label hover:text-bone transition-colors">
+              All →
+            </Link>
           </div>
           <ul className="flex flex-col gap-4">
-            <WorksheetRow code="WS1" title="Personal Consecration Plan" state="Not started" />
-            <WorksheetRow code="WS6" title="Household Covenant Draft" state="Locked · Not AI" />
+            <li>
+              <Link
+                href="/worksheets/ws1"
+                className="flex flex-col gap-1 hover:text-bone transition-colors"
+              >
+                <div className="flex items-center justify-between">
+                  <p className="font-body text-bone text-sm">Personal Consecration Plan</p>
+                  <span className="label">WS1</span>
+                </div>
+                <p className="label">Open · Feeds Ask Sent</p>
+              </Link>
+            </li>
+            <li>
+              <div className="flex flex-col gap-1 opacity-60">
+                <div className="flex items-center justify-between">
+                  <p className="font-body text-bone text-sm">Household Covenant</p>
+                  <span className="label">WS6</span>
+                </div>
+                <p className="label">Session 2.5 · Not AI</p>
+              </div>
+            </li>
           </ul>
         </section>
 
@@ -207,26 +235,6 @@ function ActivityItem({
       </div>
       <p className="font-body text-smoke text-sm">{detail}</p>
       {when && <p className="label">{when}</p>}
-    </li>
-  );
-}
-
-function WorksheetRow({
-  code,
-  title,
-  state,
-}: {
-  code: string;
-  title: string;
-  state: string;
-}) {
-  return (
-    <li className="flex flex-col gap-1">
-      <div className="flex items-center justify-between">
-        <p className="font-body text-bone text-sm">{title}</p>
-        <span className="label">{code}</span>
-      </div>
-      <p className="label">{state}</p>
     </li>
   );
 }
