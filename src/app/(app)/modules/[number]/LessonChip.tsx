@@ -6,6 +6,7 @@ type Lesson = {
   title: string;
   is_anchor: boolean;
   estimated_minutes: number | null;
+  teaching?: string | null;
 };
 
 // A chip is "active" (clickable) when the lesson row has a teaching body —

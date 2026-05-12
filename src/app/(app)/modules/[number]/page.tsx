@@ -41,7 +41,7 @@ export default async function ModuleView({
         .order("number", { ascending: true }),
       supabase
         .from("lesson")
-        .select("id, number, title, is_anchor, estimated_minutes")
+        .select("id, number, title, is_anchor, estimated_minutes, teaching")
         .eq("module_id", mod.id)
         .order("number", { ascending: true }),
       supabase
@@ -123,7 +123,12 @@ export default async function ModuleView({
           <p className="label">Lessons · {lessonList.length}</p>
           <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
             {lessonList.map((l) => (
-              <LessonChip key={l.id} lesson={l} moduleNumber={mod.number} />
+              <LessonChip
+                key={l.id}
+                lesson={l}
+                moduleNumber={mod.number}
+                active={!!l.teaching && l.teaching.length > 0}
+              />
             ))}
           </ul>
         </section>
