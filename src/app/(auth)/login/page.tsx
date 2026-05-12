@@ -39,11 +39,6 @@ function LoginForm() {
 
   return (
     <div className="flex flex-col gap-10">
-      <div className="flex flex-col gap-3">
-        <p className="label">Sign in</p>
-        <h1 className="display text-4xl md:text-5xl leading-tight">Welcome back.</h1>
-      </div>
-
       <form onSubmit={handleSubmit} className="flex flex-col gap-5">
         <label className="flex flex-col gap-2">
           <span className="label">Email</span>
