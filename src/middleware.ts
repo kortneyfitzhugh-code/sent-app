@@ -2,6 +2,8 @@ import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
 const PUBLIC_PATHS = ["/", "/login", "/signup"];
+// Path prefixes that are public-by-default (recipients may not be authenticated yet).
+const PUBLIC_PREFIXES = ["/invites/", "/auth/"];
 
 export async function middleware(request: NextRequest) {
   let response = NextResponse.next({ request });
@@ -29,7 +31,9 @@ export async function middleware(request: NextRequest) {
   } = await supabase.auth.getUser();
 
   const { pathname } = request.nextUrl;
-  const isPublic = PUBLIC_PATHS.includes(pathname);
+  const isPublic =
+    PUBLIC_PATHS.includes(pathname) ||
+    PUBLIC_PREFIXES.some((p) => pathname.startsWith(p));
   const isAuthRoute = pathname.startsWith("/login") || pathname.startsWith("/signup");
 
   if (!user && !isPublic) {
