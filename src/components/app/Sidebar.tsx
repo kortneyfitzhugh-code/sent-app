@@ -10,23 +10,19 @@ type Profile = {
   country: string | null;
 };
 
-const NAV: { href: string; label: string; meta?: string }[] = [
-  { href: "/dashboard", label: "Dashboard", meta: "Today" },
-  { href: "/modules", label: "My Modules", meta: "1/11" },
-  { href: "/tasks", label: "All Tasks" },
-  { href: "/team", label: "My Team" },
-  { href: "/worksheets", label: "Worksheets" },
-  { href: "/journal", label: "Journal" },
-  { href: "/settings", label: "Settings" },
-];
-
 const ROLE_LABEL: Record<Profile["role"], string> = {
   planter: "Planter",
   team_member: "Team Member",
   network_admin: "Network Admin",
 };
 
-export function Sidebar({ profile }: { profile: Profile }) {
+export function Sidebar({
+  profile,
+  taskCounts,
+}: {
+  profile: Profile;
+  taskCounts: { completed: number; total: number };
+}) {
   const initials = profile.full_name
     .split(/\s+/)
     .map((p) => p[0])
@@ -35,13 +31,33 @@ export function Sidebar({ profile }: { profile: Profile }) {
     .toUpperCase();
   const location = [profile.city, profile.state].filter(Boolean).join(", ");
 
+  // Meta column on the nav. "My Modules" still shows the V1 placeholder 1/11
+  // (only Module 0 is seeded; the rest ship later). "All Tasks" shows the
+  // real per-planter completion count.
+  const nav: { href: string; label: string; meta?: string }[] = [
+    { href: "/dashboard", label: "Dashboard", meta: "Today" },
+    { href: "/modules", label: "My Modules", meta: "1/11" },
+    {
+      href: "/tasks",
+      label: "All Tasks",
+      meta:
+        taskCounts.total > 0
+          ? `${taskCounts.completed}/${taskCounts.total}`
+          : undefined,
+    },
+    { href: "/team", label: "My Team" },
+    { href: "/worksheets", label: "Worksheets" },
+    { href: "/journal", label: "Journal" },
+    { href: "/settings", label: "Settings" },
+  ];
+
   return (
     <aside className="hidden md:flex md:flex-col bg-carbon border-r border-cinder min-h-screen p-8 gap-10 sticky top-0">
       <SentMark />
 
       <nav className="flex flex-col gap-1">
         <p className="label mb-2">Navigate</p>
-        {NAV.map((item) => (
+        {nav.map((item) => (
           <Link
             key={item.href}
             href={item.href}

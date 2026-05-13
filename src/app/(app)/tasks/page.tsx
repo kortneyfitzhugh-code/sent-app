@@ -39,7 +39,7 @@ export default async function AllTasksPage() {
   const [{ data: tasks }, { data: lessons }, { data: completions }] = await Promise.all([
     supabase
       .from("task")
-      .select("id, number, title, description, kind, planter_only, coach_involved, lesson_id")
+      .select("id, number, title, description, kind, planter_only, coach_involved, lesson_id, target_href")
       .eq("module_id", mod.id)
       .order("number", { ascending: true }),
     supabase
@@ -70,6 +70,7 @@ export default async function AllTasksPage() {
     coachInvolved: t.coach_involved,
     lesson: t.lesson_id ? lessonById.get(t.lesson_id) ?? null : null,
     completed: doneByTaskId.get(t.id) ?? false,
+    targetHref: t.target_href ?? null,
   }));
 
   // Group by lesson_id where present, otherwise into a "module-level" bucket.
