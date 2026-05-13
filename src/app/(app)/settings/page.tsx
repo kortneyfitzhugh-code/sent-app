@@ -2,7 +2,11 @@ import { redirect } from "next/navigation";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { SettingsForms } from "./SettingsForms";
 
-export default async function SettingsPage() {
+export default async function SettingsPage({
+  searchParams,
+}: {
+  searchParams?: { email_changed?: string };
+}) {
   const supabase = createSupabaseServerClient();
   const {
     data: { user },
@@ -17,6 +21,8 @@ export default async function SettingsPage() {
 
   if (!profile) redirect("/onboarding/role");
 
+  const emailJustChanged = searchParams?.email_changed === "1";
+
   return (
     <div className="p-6 md:p-10 flex flex-col gap-10 max-w-2xl">
       <header className="flex flex-col gap-3">
@@ -25,6 +31,15 @@ export default async function SettingsPage() {
           Your profile
         </h1>
       </header>
+
+      {emailJustChanged && (
+        <div className="card p-4 border-alive/50">
+          <p className="font-body text-bone text-sm">
+            <span className="text-alive font-medium">Email confirmed.</span>{" "}
+            Your account email is now {profile.email}.
+          </p>
+        </div>
+      )}
 
       <section>
         <h2 className="label mb-3">Identity</h2>
