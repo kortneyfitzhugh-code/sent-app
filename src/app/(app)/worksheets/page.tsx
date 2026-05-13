@@ -2,6 +2,20 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
+// Map worksheet code → where the planter goes when they tap the card.
+// Null = no destination yet (still rendered as inactive). WS2 routes to the
+// /journal page (the WS2 surface lives there as a sealed-entry journal,
+// not as a flat field form).
+const HREF_BY_CODE: Record<string, string | null> = {
+  WS1: "/worksheets/ws1",
+  WS2: "/journal",
+  WS3: "/worksheets/ws3",
+  WS4: "/worksheets/ws4",
+  WS5: "/worksheets/ws5",
+  WS6: null,
+  WS7: null,
+};
+
 export default async function WorksheetsIndex() {
   const supabase = createSupabaseServerClient();
   const {
@@ -16,7 +30,6 @@ export default async function WorksheetsIndex() {
     .maybeSingle();
   if (!profile?.track_id) redirect("/onboarding/track");
 
-  // Worksheets for the first module of the track.
   const { data: mod } = await supabase
     .from("module")
     .select("id, number, name")
@@ -24,7 +37,6 @@ export default async function WorksheetsIndex() {
     .order("display_order", { ascending: true })
     .limit(1)
     .maybeSingle();
-
   if (!mod) return null;
 
   const [{ data: worksheets }, { data: completions }] = await Promise.all([
@@ -52,13 +64,13 @@ export default async function WorksheetsIndex() {
 
       <ul className="flex flex-col gap-3">
         {(worksheets ?? []).map((w) => {
-          const isWs1 = w.code === "WS1";
+          const href = HREF_BY_CODE[w.code] ?? null;
           const isComplete = completedIds.has(w.id);
           return (
             <li key={w.id}>
-              {isWs1 ? (
+              {href ? (
                 <Link
-                  href="/worksheets/ws1"
+                  href={href}
                   className="card p-5 flex items-start gap-4 hover:border-ash transition-colors"
                 >
                   <Body w={w} isComplete={isComplete} active />
@@ -97,7 +109,9 @@ function Body({
       <span className="label shrink-0 mt-1">{w.code}</span>
       <div className="flex-1 min-w-0">
         <p className="display text-2xl leading-tight">{w.title}</p>
-        {w.purpose && <p className="font-body text-smoke text-sm mt-2">{w.purpose}</p>}
+        {w.purpose && (
+          <p className="font-body text-smoke text-sm mt-2">{w.purpose}</p>
+        )}
         <p className="label mt-3">
           {w.is_locking ? "Locking" : "Open"} ·{" "}
           {w.visibility.replace(/_/g, " ")}
@@ -108,7 +122,7 @@ function Body({
           isComplete ? "text-alive" : active ? "text-fire" : "text-smoke"
         }`}
       >
-        {isComplete ? "Done" : active ? "Open" : "Session 2.5"}
+        {isComplete ? "Done" : active ? "Open" : "Coming soon"}
       </span>
     </>
   );
