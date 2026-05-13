@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Greeting } from "./Greeting";
 
 type Profile = {
   full_name: string;
@@ -53,9 +54,7 @@ export function DashboardView({
             <p className="label">
               {profile.ministry_name ?? "Sent · Dashboard"}
             </p>
-            <h1 className="display text-3xl md:text-4xl mt-1">
-              {greet(profile.full_name)}
-            </h1>
+            <Greeting firstName={firstName(profile.full_name)} />
           </div>
           <p className="label hidden md:block">
             {[profile.city, profile.state].filter(Boolean).join(", ") || "Set location in settings"}
@@ -258,9 +257,8 @@ function ActivityItem({
   );
 }
 
-function greet(name: string) {
-  const first = name.split(/\s+/)[0] || "Friend";
-  return `Today, ${first}.`;
+function firstName(fullName: string): string {
+  return fullName.split(/\s+/)[0] || "Friend";
 }
 
 function parseLocalDate(iso: string): Date {
