@@ -1,3 +1,4 @@
+import { MessageBanner } from "@/components/MessageBanner";
 import { SentMark } from "@/components/SentMark";
 
 // Auth pages read Supabase env at render time. Force dynamic so we never
@@ -8,6 +9,7 @@ export const dynamic = "force-dynamic";
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen flex flex-col">
+      <MessageBanner />
       <header className="px-6 py-6 md:px-12 md:py-8">
         <SentMark />
       </header>

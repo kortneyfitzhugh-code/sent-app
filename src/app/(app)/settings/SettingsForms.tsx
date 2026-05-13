@@ -97,11 +97,12 @@ function EmailForm({ currentEmail }: { currentEmail: string }) {
 
         {error && <p className="font-body text-fire text-sm">{error}</p>}
         {sent && (
-          <div className="card p-3 border-alive/40">
-            <p className="font-body text-bone text-sm">
-              A verification link has been sent to{" "}
-              <span className="text-alive">{sent}</span>. Your email will update
-              once you confirm it.
+          <div className="card p-4 border-alive/40">
+            <p className="font-body text-bone text-sm leading-relaxed">
+              Two confirmation emails have been sent — one to your new address
+              and one to your current address. You must click the link in both
+              emails before your email address will update. Check both inboxes
+              including spam.
             </p>
           </div>
         )}
