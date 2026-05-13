@@ -5,6 +5,8 @@ type Profile = {
   role: "planter" | "team_member" | "network_admin";
   city: string | null;
   state: string | null;
+  launch_date: string | null;
+  ministry_name: string | null;
 };
 
 type Track = { name: string; module_count: number; duration_label: string | null } | null;
@@ -31,12 +33,16 @@ export function DashboardView({
   taskCount: number;
   completedTasks: number;
 }) {
-  // Static placeholders for Session 1. Real runway, prophetic prompt, team activity,
-  // and worksheet progress are wired in Session 2.
-  const runwayDays = 213;
-  const moduleDayIn = 14;
+  // Real runway derived from the planter's launch_date (set in /settings).
+  // When not set, the card surfaces a "Set in settings" affordance instead.
+  const today = startOfLocalDay(new Date());
+  const launch = profile.launch_date ? parseLocalDate(profile.launch_date) : null;
+  const runwayDays = launch ? Math.max(0, daysBetween(today, launch)) : null;
+  const launchPassed = launch && launch.getTime() < today.getTime();
+  // Stages bar is still a visual placeholder here (item 3 will reposition it
+  // to actual module-completion milestones).
   const moduleEstimatedDays = 227;
-  const runwayPct = Math.round((moduleDayIn / moduleEstimatedDays) * 100);
+  const runwayPct = 0;
   const progressPct = taskCount > 0 ? Math.round((completedTasks / taskCount) * 100) : 0;
 
   return (
@@ -44,7 +50,9 @@ export function DashboardView({
       <div className="flex flex-col gap-6">
         <div className="flex items-end justify-between">
           <div>
-            <p className="label">Sent · Dashboard</p>
+            <p className="label">
+              {profile.ministry_name ?? "Sent · Dashboard"}
+            </p>
             <h1 className="display text-3xl md:text-4xl mt-1">
               {greet(profile.full_name)}
             </h1>
@@ -58,15 +66,26 @@ export function DashboardView({
         <section className="card p-6 md:p-8 flex flex-col gap-6">
           <div className="flex items-center justify-between">
             <p className="label">Runway to launch</p>
-            <p className="label">Set in settings</p>
+            <Link
+              href="/settings"
+              className="label hover:text-bone transition-colors"
+            >
+              {launch ? "Edit in settings →" : "Set in settings →"}
+            </Link>
           </div>
-          <div className="flex items-baseline gap-4">
+          <div className="flex items-baseline gap-4 flex-wrap">
             <span className="font-display text-7xl md:text-8xl leading-none text-bone">
-              {runwayDays}
+              {runwayDays ?? "—"}
             </span>
             <div className="flex flex-col">
-              <span className="label">Days</span>
-              <span className="label">Target · Dec 6, 2026</span>
+              <span className="label">
+                {launchPassed ? "Past launch" : "Days"}
+              </span>
+              <span className="label">
+                {launch
+                  ? `Target · ${formatShort(launch)}`
+                  : "No target set yet"}
+              </span>
               <span className="label">First public gathering</span>
             </div>
           </div>
@@ -242,4 +261,23 @@ function ActivityItem({
 function greet(name: string) {
   const first = name.split(/\s+/)[0] || "Friend";
   return `Today, ${first}.`;
+}
+
+function parseLocalDate(iso: string): Date {
+  // Treat YYYY-MM-DD as a local date — new Date("2026-12-06") would be UTC.
+  const [y, m, d] = iso.split("-").map(Number);
+  return new Date(y, (m ?? 1) - 1, d ?? 1);
+}
+function startOfLocalDay(d: Date): Date {
+  return new Date(d.getFullYear(), d.getMonth(), d.getDate());
+}
+function daysBetween(a: Date, b: Date): number {
+  return Math.round((b.getTime() - a.getTime()) / 86_400_000);
+}
+function formatShort(d: Date): string {
+  return d.toLocaleDateString(undefined, {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
 }
