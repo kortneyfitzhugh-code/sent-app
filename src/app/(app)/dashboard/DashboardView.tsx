@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Greeting } from "./Greeting";
+import { RunwayStages } from "./RunwayStages";
 
 type Profile = {
   full_name: string;
@@ -27,12 +28,14 @@ export function DashboardView({
   module: mod,
   taskCount,
   completedTasks,
+  completedStageModules,
 }: {
   profile: Profile;
   track: Track;
   module: Module;
   taskCount: number;
   completedTasks: number;
+  completedStageModules: number;
 }) {
   // Real runway derived from the planter's launch_date (set in /settings).
   // When not set, the card surfaces a "Set in settings" affordance instead.
@@ -40,10 +43,6 @@ export function DashboardView({
   const launch = profile.launch_date ? parseLocalDate(profile.launch_date) : null;
   const runwayDays = launch ? Math.max(0, daysBetween(today, launch)) : null;
   const launchPassed = launch && launch.getTime() < today.getTime();
-  // Stages bar is still a visual placeholder here (item 3 will reposition it
-  // to actual module-completion milestones).
-  const moduleEstimatedDays = 227;
-  const runwayPct = 0;
   const progressPct = taskCount > 0 ? Math.round((completedTasks / taskCount) * 100) : 0;
 
   return (
@@ -89,27 +88,7 @@ export function DashboardView({
             </div>
           </div>
 
-          <div>
-            <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center gap-3">
-                <Pill>Sent</Pill>
-                <Pill>Foundations</Pill>
-                <Pill>Gathering</Pill>
-                <Pill emphasis>Launch</Pill>
-              </div>
-              <p className="label">{runwayPct}% of runway used</p>
-            </div>
-            <div className="h-2 w-full bg-ash/40 rounded-full overflow-hidden">
-              <div
-                className="h-full bg-fire transition-[width] duration-300"
-                style={{ width: `${Math.min(runwayPct, 100)}%` }}
-              />
-            </div>
-            <div className="flex items-center justify-between mt-2">
-              <p className="label">Day 14 of {moduleEstimatedDays}</p>
-              <p className="label">Today · Fri May 12 · Day 14 of this module</p>
-            </div>
-          </div>
+          <RunwayStages completedModules={completedStageModules} />
 
           <blockquote className="border-l-2 border-fire pl-4 font-display text-2xl md:text-3xl leading-tight text-bone">
             The covering comes before the calling becomes visible. Make the call this week.
@@ -213,24 +192,6 @@ export function DashboardView({
         </section>
       </aside>
     </div>
-  );
-}
-
-function Pill({
-  children,
-  emphasis,
-}: {
-  children: React.ReactNode;
-  emphasis?: boolean;
-}) {
-  return (
-    <span
-      className={`label ${
-        emphasis ? "text-fire" : "text-smoke"
-      }`}
-    >
-      {children}
-    </span>
   );
 }
 
