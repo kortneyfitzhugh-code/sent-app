@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Confirm your new email · Sent</title>
+  </head>
+  <body style="margin:0;padding:0;background:#0D0D0D;color:#F0ECE4;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#0D0D0D;padding:40px 16px;">
+      <tr>
+        <td align="center">
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:480px;background:#141414;border:1px solid #1E1E1E;border-radius:14px;padding:40px 32px;">
+
+            <!-- Wordmark -->
+            <tr>
+              <td style="padding-bottom:8px;">
+                <span style="font-family:'Bebas Neue',Impact,sans-serif;font-size:32px;letter-spacing:0.28em;color:#F0ECE4;text-transform:uppercase;">SENT</span>
+                <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#E85A1E;margin-left:6px;vertical-align:middle;"></span>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding-bottom:36px;">
+                <span style="font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#6A6A6A;">Born in prayer. Built for purpose.</span>
+              </td>
+            </tr>
+
+            <!-- Headline -->
+            <tr>
+              <td>
+                <h1 style="font-family:'Bebas Neue',Impact,sans-serif;font-weight:400;font-size:36px;line-height:1.05;letter-spacing:0.04em;margin:0 0 16px;color:#F0ECE4;text-transform:uppercase;">
+                  Confirm your new email.
+                </h1>
+              </td>
+            </tr>
+
+            <!-- Body copy -->
+            <tr>
+              <td style="padding-bottom:20px;">
+                <p style="font-size:15px;line-height:1.6;color:#F0ECE4;margin:0;">
+                  You asked Sent to change the email address on your account. This is a confirmation step — not a new signup. Your current account, planting progress, worksheets, and team are not affected.
+                </p>
+              </td>
+            </tr>
+
+            <!-- New email callout -->
+            <tr>
+              <td style="padding-bottom:28px;">
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#0D0D0D;border-left:3px solid #E85A1E;border-radius:0 6px 6px 0;">
+                  <tr>
+                    <td style="padding:14px 16px;">
+                      <p style="font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#6A6A6A;margin:0 0 4px;">New email</p>
+                      <p style="font-size:15px;line-height:1.4;color:#F0ECE4;margin:0;word-break:break-all;">{{ .NewEmail }}</p>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+
+            <!-- CTA button -->
+            <tr>
+              <td style="padding-bottom:28px;">
+                <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+                  <tr>
+                    <td bgcolor="#E85A1E" style="border-radius:6px;">
+                      <a href="{{ .ConfirmationURL }}" target="_blank" style="display:inline-block;padding:14px 28px;font-family:Helvetica,Arial,sans-serif;font-size:13px;letter-spacing:0.18em;text-transform:uppercase;color:#F0ECE4;text-decoration:none;font-weight:600;">
+                        Confirm new email →
+                      </a>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+
+            <!-- Behavior note -->
+            <tr>
+              <td style="padding-bottom:28px;">
+                <p style="font-size:13px;line-height:1.6;color:#6A6A6A;margin:0;">
+                  Your account email will not change until you click the link above. If you do nothing, your previous email stays active.
+                </p>
+              </td>
+            </tr>
+
+            <!-- Fallback URL -->
+            <tr>
+              <td style="padding-bottom:32px;">
+                <p style="font-size:12px;line-height:1.6;color:#6A6A6A;margin:0;">
+                  Or paste this link into your browser:<br />
+                  <a href="{{ .ConfirmationURL }}" style="color:#F0ECE4;word-break:break-all;text-decoration:underline;">{{ .ConfirmationURL }}</a>
+                </p>
+              </td>
+            </tr>
+
+            <!-- Scripture anchor -->
+            <tr>
+              <td style="border-top:1px solid #1E1E1E;padding-top:24px;">
+                <p style="font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#6A6A6A;margin:0 0 8px;">Proverbs 11:14</p>
+                <p style="font-style:italic;font-size:13px;line-height:1.6;color:#F0ECE4;margin:0;">
+                  “Where there is no guidance, a people falls, but in an abundance of counselors there is safety.”
+                </p>
+              </td>
+            </tr>
+
+            <!-- Footer -->
+            <tr>
+              <td style="padding-top:32px;">
+                <p style="font-size:11px;line-height:1.6;color:#6A6A6A;margin:0;">
+                  If you didn't request this change, ignore this email — your account email will stay the same. If you didn't make this request and you're concerned about your account, change your password from Settings.
+                </p>
+              </td>
+            </tr>
+
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>
