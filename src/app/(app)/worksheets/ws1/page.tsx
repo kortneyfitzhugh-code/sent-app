@@ -64,7 +64,7 @@ export default async function WS1Page() {
   const moduleNumber = (ws.module as any)?.number ?? "0";
 
   return (
-    <div className="grid grid-cols-1 xl:grid-cols-[1fr_320px] gap-6 p-6 md:p-10">
+    <div className="p-6 md:p-10">
       <div className="flex flex-col gap-8 max-w-3xl">
         <div className="flex items-center justify-between">
           <Link
@@ -92,8 +92,8 @@ export default async function WS1Page() {
           </p>
           <p className="font-body text-smoke text-sm">
             Fill it slowly. Write it as if you will be held to it — because you will. The
-            Spirit is the witness; Ask Sent is the coach; your accountability partner is
-            the human voice. Save and return as often as you need.
+            Spirit is the witness; your accountability partner is the human voice. Save
+            and return as often as you need.
           </p>
         </section>
 
@@ -106,22 +106,6 @@ export default async function WS1Page() {
         />
       </div>
 
-      {/* Right rail: Ask Sent placeholder (Session 3) */}
-      <aside className="hidden xl:flex flex-col gap-4 sticky top-6 self-start">
-        <div className="card p-5 border-fire/40 flex flex-col gap-3">
-          <div className="flex items-center justify-between">
-            <p className="label text-fire">Ask Sent · tool, not coach</p>
-            <span className="label text-smoke">Session 3</span>
-          </div>
-          <p className="font-body text-bone text-sm">
-            Once Ask Sent ships, it will read this worksheet and offer
-            suggestions — never edits. Each chip jumps you to the field; you sign.
-          </p>
-          <p className="label text-smoke border-t border-cinder pt-3">
-            WS6 Household Covenant is permanently excluded from this data layer.
-          </p>
-        </div>
-      </aside>
     </div>
   );
 }

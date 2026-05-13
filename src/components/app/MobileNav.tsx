@@ -3,7 +3,7 @@ import Link from "next/link";
 const ITEMS = [
   { href: "/dashboard", label: "Today" },
   { href: "/modules", label: "Modules" },
-  { href: "/ask-sent", label: "Ask Sent" },
+  { href: "/worksheets", label: "Worksheets" },
 ];
 
 export function MobileNav() {

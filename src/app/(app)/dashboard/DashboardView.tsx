@@ -167,7 +167,7 @@ export function DashboardView({
                   <p className="font-body text-bone text-sm">Personal Consecration Plan</p>
                   <span className="label">WS1</span>
                 </div>
-                <p className="label">Open · Feeds Ask Sent</p>
+                <p className="label">Open</p>
               </Link>
             </li>
             <li>
@@ -176,20 +176,12 @@ export function DashboardView({
                   <p className="font-body text-bone text-sm">Household Covenant</p>
                   <span className="label">WS6</span>
                 </div>
-                <p className="label">Session 2.5 · Not AI</p>
+                <p className="label">Session 2.5</p>
               </div>
             </li>
           </ul>
         </section>
 
-        <section className="card p-5 border-fire/40">
-          <p className="label text-fire mb-3">Ask Sent · tool, not coach</p>
-          <p className="font-body text-bone text-sm">
-            Looking at your consecration plan, what hours are you protecting for prayer this
-            week?
-          </p>
-          <p className="label mt-3">Suggested · based on Module 0 →</p>
-        </section>
       </aside>
     </div>
   );

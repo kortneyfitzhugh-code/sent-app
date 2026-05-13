@@ -100,7 +100,6 @@ function Body({
         {w.purpose && <p className="font-body text-smoke text-sm mt-2">{w.purpose}</p>}
         <p className="label mt-3">
           {w.is_locking ? "Locking" : "Open"} ·{" "}
-          {w.ai_excluded ? "Not AI" : "Feeds Ask Sent"} ·{" "}
           {w.visibility.replace(/_/g, " ")}
         </p>
       </div>

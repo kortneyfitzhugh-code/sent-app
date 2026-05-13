@@ -177,7 +177,7 @@ export default async function ModuleView({
               </div>
               <p className="font-body text-bone text-sm">{w.title}</p>
               <p className="label">
-                {w.ai_excluded ? "Not AI" : "Feeds Ask Sent"} · {w.visibility.replace(/_/g, " ")}
+                {w.visibility.replace(/_/g, " ")}
               </p>
             </Link>
           );

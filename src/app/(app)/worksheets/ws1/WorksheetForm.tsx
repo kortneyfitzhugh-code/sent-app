@@ -183,7 +183,6 @@ function FieldControl({
           <p className="font-body text-smoke text-sm mt-1">{field.helper}</p>
         )}
       </div>
-      {field.feedsAi && <span className="label text-fire">Ask</span>}
     </div>
   );
 

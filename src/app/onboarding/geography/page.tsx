@@ -99,8 +99,7 @@ export default function GeographyStep() {
           </select>
         </label>
         <p className="font-body text-smoke text-xs">
-          Used to connect you with planters in your region and to inform Ask Sent’s context.
-          Never shared publicly.
+          Used to connect you with planters in your region. Never shared publicly.
         </p>
       </div>
 

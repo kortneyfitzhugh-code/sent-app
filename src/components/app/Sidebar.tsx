@@ -16,7 +16,6 @@ const NAV: { href: string; label: string; meta?: string }[] = [
   { href: "/tasks", label: "All Tasks" },
   { href: "/team", label: "My Team" },
   { href: "/worksheets", label: "Worksheets" },
-  { href: "/ask-sent", label: "Ask Sent" },
   { href: "/journal", label: "Journal" },
   { href: "/settings", label: "Settings" },
 ];
