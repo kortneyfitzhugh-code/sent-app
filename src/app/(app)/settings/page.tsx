@@ -46,6 +46,7 @@ export default async function SettingsPage() {
       <SettingsForms
         initialLaunchDate={profile.launch_date ?? ""}
         initialMinistryName={profile.ministry_name ?? ""}
+        currentEmail={profile.email}
       />
 
       <form action="/auth/sign-out" method="post">

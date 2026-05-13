@@ -76,3 +76,34 @@ export async function changePassword(input: {
 
   return { ok: true };
 }
+
+export async function requestEmailChange(input: {
+  newEmail: string;
+  confirmEmail: string;
+}): Promise<Result> {
+  const supabase = createSupabaseServerClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user || !user.email) return { ok: false, error: "Not authenticated" };
+
+  const next = input.newEmail.trim().toLowerCase();
+  const conf = input.confirmEmail.trim().toLowerCase();
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(next)) {
+    return { ok: false, error: "Enter a valid email." };
+  }
+  if (next !== conf) {
+    return { ok: false, error: "Emails do not match." };
+  }
+  if (next === user.email.toLowerCase()) {
+    return { ok: false, error: "New email must differ from your current email." };
+  }
+
+  // Supabase sends a verification link to the new address. Until the planter
+  // clicks it, auth.users.email stays unchanged and the trigger from
+  // migration 0013 keeps public.profile.email pinned to the old address.
+  const { error } = await supabase.auth.updateUser({ email: next });
+  if (error) return { ok: false, error: error.message };
+
+  return { ok: true };
+}

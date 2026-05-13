@@ -3,14 +3,20 @@
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { PasswordField } from "@/components/PasswordField";
-import { changePassword, updateProfileSettings } from "@/lib/actions/settings";
+import {
+  changePassword,
+  requestEmailChange,
+  updateProfileSettings,
+} from "@/lib/actions/settings";
 
 export function SettingsForms({
   initialLaunchDate,
   initialMinistryName,
+  currentEmail,
 }: {
   initialLaunchDate: string;
   initialMinistryName: string;
+  currentEmail: string;
 }) {
   return (
     <>
@@ -18,8 +24,103 @@ export function SettingsForms({
         initialLaunchDate={initialLaunchDate}
         initialMinistryName={initialMinistryName}
       />
+      <EmailForm currentEmail={currentEmail} />
       <PasswordForm />
     </>
+  );
+}
+
+function EmailForm({ currentEmail }: { currentEmail: string }) {
+  const [next, setNext] = useState("");
+  const [confirm, setConfirm] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [sent, setSent] = useState<string | null>(null);
+  const [pending, startTransition] = useTransition();
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setError(null);
+    setSent(null);
+    startTransition(async () => {
+      const res = await requestEmailChange({ newEmail: next, confirmEmail: confirm });
+      if (!res.ok) {
+        setError(res.error);
+        return;
+      }
+      setSent(next.trim().toLowerCase());
+      setNext("");
+      setConfirm("");
+    });
+  }
+
+  return (
+    <section>
+      <h2 className="label mb-3">Email</h2>
+      <form onSubmit={handleSubmit} className="card p-5 flex flex-col gap-5">
+        <label className="flex flex-col gap-2">
+          <span className="label">Current email</span>
+          <input
+            className="input-shell opacity-70 cursor-not-allowed"
+            type="email"
+            value={currentEmail}
+            readOnly
+            aria-readonly
+            tabIndex={-1}
+          />
+        </label>
+
+        <label className="flex flex-col gap-2">
+          <span className="label">New email</span>
+          <input
+            className="input-shell"
+            type="email"
+            value={next}
+            onChange={(e) => setNext(e.target.value)}
+            placeholder="you@new-address.com"
+            autoComplete="email"
+            required
+          />
+        </label>
+
+        <label className="flex flex-col gap-2">
+          <span className="label">Confirm new email</span>
+          <input
+            className="input-shell"
+            type="email"
+            value={confirm}
+            onChange={(e) => setConfirm(e.target.value)}
+            placeholder="Re-enter the new address"
+            autoComplete="email"
+            required
+          />
+        </label>
+
+        {error && <p className="font-body text-fire text-sm">{error}</p>}
+        {sent && (
+          <div className="card p-3 border-alive/40">
+            <p className="font-body text-bone text-sm">
+              A verification link has been sent to{" "}
+              <span className="text-alive">{sent}</span>. Your email will update
+              once you confirm it.
+            </p>
+          </div>
+        )}
+
+        <div className="flex items-center justify-between gap-3 flex-wrap">
+          <p className="label">
+            We'll keep showing your current email until you click the
+            verification link.
+          </p>
+          <button
+            type="submit"
+            className="btn-fire"
+            disabled={pending || !next || !confirm}
+          >
+            {pending ? "Sending…" : "Send verification"}
+          </button>
+        </div>
+      </form>
+    </section>
   );
 }
 
