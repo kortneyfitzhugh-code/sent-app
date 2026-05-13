@@ -1,8 +1,12 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { parseLessonTeaching } from "@/lib/parseLessonTeaching";
+import { ActivationSection } from "./ActivationSection";
+import { KeyScripturesSection } from "./KeyScripturesSection";
 import { LessonBody } from "./LessonBody";
 import { MarkReadButton } from "./MarkReadButton";
+import { ReflectionsSection } from "./ReflectionsSection";
 import { SectionMarker } from "./SectionMarker";
 
 export default async function LessonReader({
@@ -68,6 +72,24 @@ export default async function LessonReader({
     .eq("module_id", mod.id)
     .order("number", { ascending: true });
 
+  // Parse the teaching markdown into its four sections once, server-side,
+  // so the client never sees the raw markdown.
+  const parsed = lesson.teaching ? parseLessonTeaching(lesson.teaching) : null;
+
+  // Existing reflection answers — fetched once, passed to the client
+  // component as initial state.
+  const reflectionAnswers: Record<number, string> = {};
+  if (parsed && parsed.reflections.length > 0) {
+    const { data: rows } = await supabase
+      .from("lesson_reflection")
+      .select("question_number, answer")
+      .eq("planter_id", user.id)
+      .eq("lesson_id", lesson.id);
+    for (const r of rows ?? []) {
+      if (r.answer != null) reflectionAnswers[r.question_number] = r.answer;
+    }
+  }
+
   return (
     <div className="grid grid-cols-1 xl:grid-cols-[1fr_320px] gap-6 p-6 md:p-10">
       <article className="flex flex-col gap-10 max-w-3xl">
@@ -101,18 +123,30 @@ export default async function LessonReader({
         </header>
 
         {/* Body */}
-        {lesson.teaching ? (
+        {parsed ? (
           <>
             {lesson.hook && (
               <section>
                 <SectionMarker numeral="I" name="Opening" />
-                <p className="font-body text-bone text-lg leading-relaxed">{lesson.hook}</p>
+                <p className="font-body text-bone text-lg leading-relaxed">
+                  {lesson.hook}
+                </p>
               </section>
             )}
-            <section>
-              <SectionMarker numeral="II" name="The Lesson" />
-              <LessonBody teaching={lesson.teaching} />
-            </section>
+            {parsed.body && (
+              <section>
+                <SectionMarker numeral="II" name="The Lesson" />
+                <LessonBody teaching={parsed.body} />
+              </section>
+            )}
+            <KeyScripturesSection scriptures={parsed.scriptures} />
+            <ReflectionsSection
+              lessonId={lesson.id}
+              questions={parsed.reflections}
+              initialAnswers={reflectionAnswers}
+            />
+            <ActivationSection text={parsed.activation} />
+
             {linkedTask && (
               <section className="border-t border-cinder pt-8">
                 <MarkReadButton
@@ -125,11 +159,11 @@ export default async function LessonReader({
           </>
         ) : (
           <section className="card p-8 flex flex-col gap-3">
-            <p className="label text-fire">Coming in Session 3</p>
+            <p className="label text-fire">Lesson content not yet available</p>
             <p className="font-body text-bone">
-              This lesson's full body lands in Session 3. The structure is here — hook,
-              scripture anchor, teaching, reflection — and your task progress will count
-              the moment the content is published.
+              The structure is here — hook, scripture anchor, teaching,
+              reflection — and your task progress will count the moment the
+              content is published.
             </p>
             {lesson.hook && (
               <p className="font-body text-smoke text-sm italic">"{lesson.hook}"</p>
