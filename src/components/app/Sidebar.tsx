@@ -57,7 +57,11 @@ export function Sidebar({ profile }: { profile: Profile }) {
         ))}
       </nav>
 
-      <div className="mt-auto card p-4 flex items-center gap-3">
+      <Link
+        href="/settings"
+        className="mt-auto card p-4 flex items-center gap-3 hover:border-ash transition-colors"
+        aria-label="Open settings"
+      >
         <div className="w-10 h-10 rounded-full bg-fire/15 border border-fire/40 grid place-items-center font-nav text-fire text-sm tracking-wider3">
           {initials}
         </div>
@@ -68,7 +72,7 @@ export function Sidebar({ profile }: { profile: Profile }) {
             {location && ` · ${location}`}
           </p>
         </div>
-      </div>
+      </Link>
     </aside>
   );
 }
